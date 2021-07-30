@@ -1,7 +1,8 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import data from "./data.json"
 import Products from "./components/Products"
 import Filter from "./components/Filter";
+import Cart from "./components/Cart";
 function App() {
 
   const initState = {
@@ -9,8 +10,10 @@ function App() {
       size:"",
       sort:""
     };
+
+
     const [state,setState] = useState(initState)
-    console.log(state.products)
+    const [cartItems,setCartItems] = useState([])
 
   const filterProducts = (event) => {
     console.log(event.target.value)
@@ -24,6 +27,7 @@ function App() {
     }
     
   }
+
   const sortProducts = (event) => {
     const sort = event.target.value
     //console.log(event.target.value)
@@ -40,7 +44,32 @@ function App() {
       )
     })
   }
+  const removeFromCart = (product) => {
+    const nowCartItems = cartItems.slice()
+    console.log(nowCartItems)
+    
+    setCartItems(nowCartItems.filter((x)=> x._id !== product._id))
+    console.log(cartItems)
+  }
+  const addToCart = (product) => {
+    const nowCartItems = cartItems.slice()
+    let alreadyInCart = false
+    nowCartItems.forEach((item) => {
+      if(item._id === product._id){
+        item.count++;
+        alreadyInCart = true
+      }
+    })
+    if(!alreadyInCart){
+      cartItems.push({...product,count:1})
+      
+    }
+    setCartItems(cartItems)
+  } 
+  
+  
 
+  
     return (
       <div className="grid-container">
         <header>
@@ -55,10 +84,13 @@ function App() {
               filterProducts={filterProducts}
               sortProducts={sortProducts}
               />
-              <Products products={state.products} />
+              <Products products={state.products}
+              addToCart={addToCart}
+              />
             </div>
             <div className="sidebar">
-              cart
+              <Cart cartItems={cartItems}
+              removeFromCart={removeFromCart}/>
             </div>
           </div>
         </main>

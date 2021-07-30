@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-
+import {Slide} from 'react-awesome-reveal'
 export default function Cart({cartItems,removeFromCart,createOrder}) {
     const [checkout,setCheckout] = useState(false)
     const [state,setState] = useState({
@@ -7,24 +7,12 @@ export default function Cart({cartItems,removeFromCart,createOrder}) {
         name:"",
         address:""
     })
-    // const [email,setEmail] = useState("")
-    // const [name,setName] = useState("")
-    // const [address,setAddress] = useState("")
+
 
     const handleInput = (e) => {
         setState({ [e.target.name]: e.target.value })
     }
 
-    //   createOrder = (e) => {
-    //     e.preventDefault();
-    //     const order = {
-    //         name: state.name,
-    //         email: state.email,
-    //         address: state.address,
-    //         cartItems: cartItems
-    //     }
-    //     createOrder(order)
-    // }
     
 
     return (
@@ -37,9 +25,11 @@ export default function Cart({cartItems,removeFromCart,createOrder}) {
             You have {cartItems.length} in the cart{" "}
           </div>
         )}   
-
+            
             <div className="">
+                
                 <div className="cart">
+                <Slide cascade={true}>
                     <ul className="cart-items">
                         {cartItems.map(item => (
                             <li key={item._id}>
@@ -63,6 +53,8 @@ export default function Cart({cartItems,removeFromCart,createOrder}) {
                             </li>
                         ))}
                     </ul>
+                    </Slide>
+
                 </div>
                 {cartItems.length !== 0 && (
                     <div>
@@ -77,6 +69,7 @@ export default function Cart({cartItems,removeFromCart,createOrder}) {
                     </div>
                 </div>
                 {checkout && (
+                    <Slide direction="right">
                     <div className="cart">
                         <form onSubmit={(e) => {
         e.preventDefault();
@@ -109,13 +102,14 @@ export default function Cart({cartItems,removeFromCart,createOrder}) {
                             </ul>
                         </form>
                     </div>
+                    </Slide>
                     
                 )}
                 </div>
                 )}
                 
             </div>
-
+            
             
         </div>
     )

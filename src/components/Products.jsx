@@ -1,8 +1,11 @@
 import { model } from 'mongoose'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import {Fade, Zoom} from 'react-awesome-reveal'
 import Modal from "react-modal"
-export default function Products({products, addToCart}) {
+import { connect } from 'react-redux'
+import { fetchProducts } from '../actions/productActions'
+
+function Products({products, addToCart,fetchProducts}) {
     const [modal,setModal] = useState({product:null})
 
     const openModal = (product) => {
@@ -12,13 +15,19 @@ export default function Products({products, addToCart}) {
     const closeModal = () => {
         setModal({product:null})
     }
-
+    console.log(products)
     const {product} = modal;
+
+    useEffect(() => {
+        fetchProducts()
+    })
 
     return (
         <div>
             <Fade>
-            <ul className="products">
+                {
+                    !products ? <div>Loading...</div>: 
+                    <ul className="products">
                 {products.map((product) => (
                     <li>
                         <div className="product">
@@ -36,6 +45,8 @@ export default function Products({products, addToCart}) {
                     </li>
                 ))}
             </ul>
+                }
+            
             </Fade>
             {product && 
             <Modal isOpen={true} onRequestClose={closeModal}>
@@ -66,3 +77,5 @@ export default function Products({products, addToCart}) {
         </div>
     )
 }
+
+export default connect((state)=>({products:state.products.items}),{fetchProducts})(Products)

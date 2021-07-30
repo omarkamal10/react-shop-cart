@@ -9,14 +9,15 @@ app.use(bodyParser.json());
 app.use("/", express.static(__dirname + "/build"));
 app.get("/", (req, res) => res.sendFile(__dirname + "/build/index.html"));
 
-mongoose.connect(
-  process.env.MONGODB_URL || "mongodb://localhost/react-shopping-cart-db",
-  {
+mongoose
+  .connect("mongodb+srv://Omar:oo99oo99@blog.t00lo.mongodb.net/BlogDB?retryWrites=true&w=majority", {
     useNewUrlParser: true,
-    useCreateIndex: true,
     useUnifiedTopology: true,
-  }
-);
+    useCreateIndex: true,
+    useFindAndModify:true
+  })
+  .then(console.log("Connected to MongoDB"))
+  .catch((err) => console.log(err));
 
 const Product = mongoose.model(
   "products",
@@ -95,5 +96,5 @@ app.delete("/api/orders/:id", async (req, res) => {
   res.send(order);
 });
 
-const port = process.env.PORT || 5000;
+const port = 5000;
 app.listen(port, () => console.log("serve at http://localhost:5000"));
